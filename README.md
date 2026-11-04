@@ -24,6 +24,7 @@ Why this way:
 | `.env` | Created by `setup`: server IP + optional DNS. **No secrets.** |
 | `vpn-secrets.xml` | Created by `setup`: username, password, PSK **encrypted** (see [Credentials & security](#credentials--security)) |
 | `.env.example` | Shows what `.env` contains |
+| `.github/workflows/gitleaks.yml` | Scans every push and pull request for committed secrets ([gitleaks](https://github.com/gitleaks/gitleaks)) |
 
 `.env` and `vpn-secrets.xml` are personal and ignored by `.gitignore`. Don't share them.
 
