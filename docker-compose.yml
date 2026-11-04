@@ -1,0 +1,18 @@
+services:
+  vpn:
+    build: .
+    container_name: l2tp-socks
+    env_file: .env              # VPN_SERVER, VPN_DNS only - no secrets here
+    secrets: [vpn_user, vpn_password, vpn_psk]
+    cap_add: [NET_ADMIN]
+    devices: ["/dev/ppp:/dev/ppp"]
+    ports:
+      - "127.0.0.1:1080:1080"   # localhost only: the proxy has no password
+    restart: unless-stopped
+
+# Delivered as files in /run/secrets (not visible in `docker inspect`).
+# vpn.ps1 decrypts vpn-secrets.xml (Windows DPAPI) into these env vars only while creating the container.
+secrets:
+  vpn_user:     { environment: VPN_USER }
+  vpn_password: { environment: VPN_PASSWORD }
+  vpn_psk:      { environment: VPN_PSK }

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 72 960 456" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="network-title network-desc" id="network-root">
+        <title id="network-title">L2TP/IPsec VPN as a local SOCKS5 proxy</title>
+        <desc id="network-desc">Proxifier sends traffic that matches a rule to a SOCKS5 proxy on 127.0.0.1:1080 inside a Docker container, which carries it over L2TP and IPsec to the company VPN server; all other traffic goes straight to the internet.</desc>
+        <defs>
+      <style>#network-root { font-family: 'Geist', system-ui, 'Segoe UI', sans-serif; color: #2d3142; }
+      #network-root .diagram-container { width: 100%; overflow-x: auto; }
+      #network-root .diagram-container { overflow-x: visible; }</style>
+          <marker id="network-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+          <marker id="network-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+        </defs>
+
+        <rect x="0" y="72" width="960" height="456" fill="#f5f5f5"/>
+
+        <!-- Zone: Docker container -->
+        <rect x="464" y="104" width="224" height="360" rx="8" fill="#2d3142" stroke="#2d3142" stroke-width="0.8" fill-opacity="0.02" stroke-opacity="0.10"/>
+        <rect x="476" y="108" width="112" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="480" y="117" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Consolas, monospace" letter-spacing="0.14em">DOCKER · L2TP-SOCKS</text>
+
+        <!-- Arrows (drawn before nodes) -->
+        <!-- apps -> proxifier -->
+        <line x1="168" y1="170" x2="224" y2="170" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#network-arrow)"/>
+        <!-- proxifier -> dante (headline path) -->
+        <line x1="376" y1="170" x2="488" y2="170" stroke="#bf4520" stroke-width="1.2" marker-end="url(#network-arrow-accent)"/>
+        <rect x="392" y="144" width="56" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="420" y="153" fill="#bf4520" font-size="8" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">RULE MATCH</text>
+        <!-- proxifier -> internet -->
+        <line x1="300" y1="200" x2="300" y2="260" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#network-arrow)"/>
+        <rect x="308" y="224" width="44" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="312" y="233" fill="#5a6580" font-size="8" font-family="'Geist Mono', ui-monospace, Consolas, monospace" letter-spacing="0.06em">DEFAULT</text>
+        <!-- dante -> ppp0 -->
+        <line x1="576" y1="200" x2="576" y2="260" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#network-arrow)"/>
+        <!-- ppp0 -> ipsec -->
+        <line x1="576" y1="320" x2="576" y2="380" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#network-arrow)"/>
+        <!-- ipsec -> vpn server -->
+        <line x1="664" y1="410" x2="792" y2="410" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#network-arrow)"/>
+        <rect x="706" y="384" width="68" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="740" y="393" fill="#5a6580" font-size="8" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">UDP 500/4500</text>
+
+        <!-- Nodes -->
+        <!-- Windows apps (backend) -->
+        <rect x="32" y="140" width="136" height="60" rx="6" fill="#f5f5f5"/>
+        <rect x="32" y="140" width="136" height="60" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="40" y="146" width="28" height="12" rx="2" fill="none" stroke="#2d3142" stroke-width="0.8" stroke-opacity="0.40"/>
+        <text x="54" y="155" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.08em" fill-opacity="0.8">APP</text>
+        <text x="100" y="172" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, 'Segoe UI', sans-serif" text-anchor="middle">Windows apps</text>
+        <text x="100" y="188" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle">browser · git · IDE</text>
+
+        <!-- Proxifier (backend) -->
+        <rect x="224" y="140" width="152" height="60" rx="6" fill="#f5f5f5"/>
+        <rect x="224" y="140" width="152" height="60" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="232" y="146" width="36" height="12" rx="2" fill="none" stroke="#2d3142" stroke-width="0.8" stroke-opacity="0.40"/>
+        <text x="250" y="155" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.08em" fill-opacity="0.8">RULES</text>
+        <text x="300" y="172" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, 'Segoe UI', sans-serif" text-anchor="middle">Proxifier</text>
+        <text x="300" y="188" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle">first match wins</text>
+
+        <!-- Internet (external) -->
+        <rect x="224" y="260" width="152" height="60" rx="6" fill="#f5f5f5"/>
+        <rect x="224" y="260" width="152" height="60" rx="6" fill="#2d3142" stroke="#2d3142" stroke-width="1" fill-opacity="0.03" stroke-opacity="0.30"/>
+        <rect x="232" y="266" width="28" height="12" rx="2" fill="none" stroke="#2d3142" stroke-width="0.8" stroke-opacity="0.30"/>
+        <text x="246" y="275" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.08em" fill-opacity="0.7">EXT</text>
+        <text x="300" y="292" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, 'Segoe UI', sans-serif" text-anchor="middle">Internet</text>
+        <text x="300" y="308" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle">direct, no VPN</text>
+
+        <!-- Dante SOCKS5 (focal) -->
+        <rect x="488" y="140" width="176" height="60" rx="6" fill="#f5f5f5"/>
+        <rect x="488" y="140" width="176" height="60" rx="6" fill="#bf4520" stroke="#bf4520" stroke-width="1.2" fill-opacity="0.08"/>
+        <rect x="496" y="146" width="36" height="12" rx="2" fill="none" stroke="#bf4520" stroke-width="0.8" stroke-opacity="0.50"/>
+        <text x="514" y="155" fill="#bf4520" font-size="7" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.08em">PROXY</text>
+        <text x="576" y="172" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, 'Segoe UI', sans-serif" text-anchor="middle">Dante SOCKS5</text>
+        <text x="576" y="188" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle">127.0.0.1:1080</text>
+
+        <!-- ppp0 (backend) -->
+        <rect x="488" y="260" width="176" height="60" rx="6" fill="#f5f5f5"/>
+        <rect x="488" y="260" width="176" height="60" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="496" y="266" width="32" height="12" rx="2" fill="none" stroke="#2d3142" stroke-width="0.8" stroke-opacity="0.40"/>
+        <text x="512" y="275" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.08em" fill-opacity="0.8">L2TP</text>
+        <text x="576" y="292" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, 'Segoe UI', sans-serif" text-anchor="middle">ppp0</text>
+        <text x="576" y="308" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle">xl2tpd + pppd</text>
+
+        <!-- strongSwan IPsec (backend) -->
+        <rect x="488" y="380" width="176" height="60" rx="6" fill="#f5f5f5"/>
+        <rect x="488" y="380" width="176" height="60" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="496" y="386" width="36" height="12" rx="2" fill="none" stroke="#2d3142" stroke-width="0.8" stroke-opacity="0.40"/>
+        <text x="514" y="395" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.08em" fill-opacity="0.8">IPSEC</text>
+        <text x="576" y="412" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, 'Segoe UI', sans-serif" text-anchor="middle">strongSwan</text>
+        <text x="576" y="428" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle">IKEv1 · PSK · NAT-T</text>
+
+        <!-- VPN server (external) -->
+        <rect x="792" y="380" width="144" height="60" rx="6" fill="#f5f5f5"/>
+        <rect x="792" y="380" width="144" height="60" rx="6" fill="#2d3142" stroke="#2d3142" stroke-width="1" fill-opacity="0.03" stroke-opacity="0.30"/>
+        <rect x="800" y="386" width="28" height="12" rx="2" fill="none" stroke="#2d3142" stroke-width="0.8" stroke-opacity="0.30"/>
+        <text x="814" y="395" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle" letter-spacing="0.08em" fill-opacity="0.7">EXT</text>
+        <text x="864" y="412" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, 'Segoe UI', sans-serif" text-anchor="middle">VPN server</text>
+        <text x="864" y="428" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Consolas, monospace" text-anchor="middle">company network</text>
+
+        <!-- Legend -->
+        <line x1="32" y1="484" x2="928" y2="484" stroke="#2d3142" stroke-width="0.8" stroke-opacity="0.10"/>
+        <text x="32" y="508" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Consolas, monospace" letter-spacing="0.14em">LEGEND</text>
+
+        <rect x="112" y="498" width="20" height="12" rx="2" fill="#bf4520" stroke="#bf4520" stroke-width="1" fill-opacity="0.08"/>
+        <text x="140" y="508" fill="#2d3142" font-size="9" font-family="'Geist', system-ui, 'Segoe UI', sans-serif">SOCKS5 entry point</text>
+
+        <rect x="264" y="498" width="20" height="12" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="292" y="508" fill="#2d3142" font-size="9" font-family="'Geist', system-ui, 'Segoe UI', sans-serif">Runs on this PC</text>
+
+        <rect x="400" y="498" width="20" height="12" rx="2" fill="#2d3142" stroke="#2d3142" stroke-width="1" fill-opacity="0.03" stroke-opacity="0.30"/>
+        <text x="428" y="508" fill="#2d3142" font-size="9" font-family="'Geist', system-ui, 'Segoe UI', sans-serif">Outside this PC</text>
+
+        <line x1="536" y1="504" x2="564" y2="504" stroke="#bf4520" stroke-width="1.2" marker-end="url(#network-arrow-accent)"/>
+        <text x="572" y="508" fill="#2d3142" font-size="9" font-family="'Geist', system-ui, 'Segoe UI', sans-serif">Matched by a rule</text>
+
+        <line x1="688" y1="504" x2="716" y2="504" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#network-arrow)"/>
+        <text x="724" y="508" fill="#2d3142" font-size="9" font-family="'Geist', system-ui, 'Segoe UI', sans-serif">Traffic</text>
+      </svg>
