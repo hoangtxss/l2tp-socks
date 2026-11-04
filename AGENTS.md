@@ -28,6 +28,11 @@ curl.exe -sS -o NUL -w "HTTP %{http_code}`n" https://gitlab.company.local/users/
 
 `vpn.cmd` only wraps `powershell -ExecutionPolicy Bypass -File vpn.ps1`.
 
+`doh-apply.ps1` / `doh-rollback.ps1` are optional host-side scripts, independent of the container:
+they switch the Windows adapter's DNS to Cloudflare DNS over HTTPS and back (self-elevate via UAC,
+write to the git-ignored `doh-logs\`). Same PS 5.1 / pure-ASCII rules as `vpn.ps1`. Don't run them
+as a test: they change the user's live DNS. Syntax-check them with the parser command above.
+
 ## Architecture (cross-file flows)
 
 **Secrets path.** The three secrets (user, password, PSK) are never plain text on disk:
