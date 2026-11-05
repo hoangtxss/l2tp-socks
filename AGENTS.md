@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guidance for AI coding agents working in this repository. User-facing docs are in `README.md`.
+Guidance for AI coding agents working in this repository. User-facing docs are in `README.md` (Vietnamese: `README.vi.md`).
 
 ## What this is
 
@@ -73,7 +73,8 @@ There is no in-process reconnect logic.
 - `ppp0 did not come up`, `Secret \S+ is missing`
 - `initiate failed`, `AUTHENTICATION_FAILED|decryption failed|invalid HASH`, `NO_PROPOSAL_CHOSEN`
 
-If you change any of these messages, update `Wait-Ready` and README Troubleshooting in the same change.
+If you change any of these messages, update `Wait-Ready` and the Troubleshooting tables in `README.md` and `README.vi.md`
+in the same change. Keep the two READMEs in sync.
 
 ## Non-obvious constraints (each was hit in practice)
 

@@ -1,5 +1,7 @@
 # L2TP/IPsec VPN → local SOCKS5 proxy (Proxifier-style split tunnel)
 
+English | [Tiếng Việt](README.vi.md)
+
 Connect to the company L2TP/IPsec VPN **without** routing your whole PC through it.
 The VPN runs inside a small Docker container and is exposed to Windows only as a
 SOCKS5 proxy on `127.0.0.1:1080`. Proxifier then decides, per app / domain / IP / port,
