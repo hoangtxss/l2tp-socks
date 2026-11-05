@@ -195,7 +195,8 @@ see the browser row in Troubleshooting.
 | `initiate failed: CHILD_SA 'l2tp' not established` with only `sending retransmit` lines | Server unreachable: wrong `VPN_SERVER`, or UDP 500/4500 blocked by your network. Try another network / ask DevOps. |
 | `AUTHENTICATION_FAILED`, `decryption failed` or `invalid HASH` | Wrong **PSK**. Re-run `.\vpn.cmd setup`. |
 | `NO_PROPOSAL_CHOSEN` | Server uses ciphers not in our list. Send the log to whoever maintains this repo (proposals are in `entrypoint.sh`). |
-| `ppp0 did not come up (check user/password)` | Wrong username/password, or account locked. The script stops the VPN for you; fix with `.\vpn.cmd setup`. |
+| `ppp0 did not come up (check user/password)` | Wrong username/password, or account locked (the log then shows `PAP/CHAP authentication failed`). The script stops the VPN for you; fix with `.\vpn.cmd setup`. |
+| `Couldn't set tty to PPP discipline: Operation not permitted` | The Docker kernel's `ppp_async` module is not loaded and the container may not load it. Not a login problem. Make sure `docker-compose.yml` has `cap_add: [NET_ADMIN, SYS_MODULE]`, then `.\vpn.cmd apply`. |
 | Container keeps `Restarting` | `.\vpn.cmd logs` and match a line above. |
 | Proxy works for IPs but not hostnames | Enable *Resolve hostnames through proxy* in Proxifier; if still failing, set `VPN_DNS` in `.env`. |
 | `cannot complete SOCKS5 connection ... (5)` / container resolves names to `127.112.x.x` | The container used Windows DNS, which Proxifier answers with fake IPs. Fixed in `entrypoint.sh`: if the VPN sends no DNS, it uses 1.1.1.1 / 8.8.8.8 through the tunnel. Run `.\vpn.cmd apply` after updating. |

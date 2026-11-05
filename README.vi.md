@@ -196,7 +196,8 @@ vẫn lỗi, xem dòng về trình duyệt trong phần Xử lý sự cố.
 | `initiate failed: CHILD_SA 'l2tp' not established` mà chỉ có các dòng `sending retransmit` | Không tới được server: sai `VPN_SERVER`, hoặc mạng của bạn chặn UDP 500/4500. Thử mạng khác / hỏi DevOps. |
 | `AUTHENTICATION_FAILED`, `decryption failed` hoặc `invalid HASH` | Sai **PSK**. Chạy lại `.\vpn.cmd setup`. |
 | `NO_PROPOSAL_CHOSEN` | Server dùng bộ mã hóa không có trong danh sách của mình. Gửi log cho người đang bảo trì repo này (các proposal nằm trong `entrypoint.sh`). |
-| `ppp0 did not come up (check user/password)` | Sai username/password, hoặc tài khoản bị khóa. Script đã tự dừng VPN giúp bạn; sửa bằng `.\vpn.cmd setup`. |
+| `ppp0 did not come up (check user/password)` | Sai username/password, hoặc tài khoản bị khóa (khi đó log có dòng `PAP/CHAP authentication failed`). Script đã tự dừng VPN giúp bạn; sửa bằng `.\vpn.cmd setup`. |
+| `Couldn't set tty to PPP discipline: Operation not permitted` | Module `ppp_async` của kernel Docker chưa được nạp và container không có quyền nạp nó. Không phải lỗi đăng nhập. Kiểm tra `docker-compose.yml` có `cap_add: [NET_ADMIN, SYS_MODULE]`, rồi chạy `.\vpn.cmd apply`. |
 | Container cứ ở trạng thái `Restarting` | Chạy `.\vpn.cmd logs` rồi đối chiếu với các dòng ở trên. |
 | Proxy chạy với IP nhưng không chạy với hostname | Bật *Resolve hostnames through proxy* trong Proxifier; nếu vẫn lỗi, đặt `VPN_DNS` trong `.env`. |
 | `cannot complete SOCKS5 connection ... (5)` / container phân giải tên ra `127.112.x.x` | Container đã dùng DNS của Windows, và Proxifier trả lời bằng IP giả. Đã sửa trong `entrypoint.sh`: nếu VPN không gửi DNS, container dùng 1.1.1.1 / 8.8.8.8 qua tunnel. Chạy `.\vpn.cmd apply` sau khi cập nhật. |
