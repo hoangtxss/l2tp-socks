@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guidance for AI coding agents working in this repository. User-facing docs are in `README.md`.
+Guidance for AI coding agents working in this repository. User-facing docs are in `README.md` (Vietnamese: `README.vi.md`).
 
 ## What this is
 
@@ -70,15 +70,22 @@ There is no in-process reconnect logic.
 **Log lines are an API.** `vpn.ps1` `Wait-Ready` regex-matches strings printed by
 `entrypoint.sh` and strongSwan:
 - `SOCKS5 ready`, `ppp0 up`, `DNS:`
-- `ppp0 did not come up`, `Secret \S+ is missing`
+- `ppp0 did not come up`, `Secret \S+ is missing`, `PPP discipline` (pppd, via `logfile /proc/1/fd/1`)
 - `initiate failed`, `AUTHENTICATION_FAILED|decryption failed|invalid HASH`, `NO_PROPOSAL_CHOSEN`
 
-If you change any of these messages, update `Wait-Ready` and README Troubleshooting in the same change.
+If you change any of these messages, update `Wait-Ready` and the Troubleshooting tables in `README.md` and `README.vi.md`
+in the same change. Keep the two READMEs in sync.
 
 ## Non-obvious constraints (each was hit in practice)
 
-- **Docker Desktop kernel** (5.15 WSL2):
+- **Docker Desktop kernel** (WSL2; was 5.15, now 6.6):
   - It has XFRM/ESP and PPP but no `PPPOL2TP`, so xl2tpd runs in userspace mode.
+  - On 6.6, `ppp_async` is a module (not loaded at boot) and `dev.tty.ldisc_autoload=0`. Without
+    `CAP_SYS_MODULE`, pppd fails with `Couldn't set tty to PPP discipline: Operation not permitted`
+    before sending any credentials, and Wait-Ready used to misreport it as "Login failed".
+    Compose adds `SYS_MODULE`. `CAP_SYS_ADMIN` does not help.
+  - pppd and xl2tpd only log to syslog, and the container has none. `logfile /proc/1/fd/1` and
+    `xl2tpd -D` send their output to the container log.
   - Docker Desktop's NAT only forwards TCP/UDP, not raw ESP, so `encap = yes` (NAT-T on UDP 4500) is required.
   - Legacy servers need `modp1024`/3DES in the proposals, which are not in strongSwan's defaults.
 - **Alpine strongSwan 6:** use `swanctl` + `/usr/lib/strongswan/charon`, not `ipsec.conf`.

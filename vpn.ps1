@@ -176,6 +176,11 @@ function Wait-Ready([string]$Since) {
       Ok "VPN connected. Proxy: SOCKS5 $(Proxy-Addr)"
       return
     }
+    # pppd could not load the PPP line discipline (kernel module); no login was attempted
+    if ($log -match 'PPP discipline') {
+      Write-Host ''; docker compose down *> $null
+      Fail 'pppd cannot use PPP in the Docker kernel (ppp_async not loaded). Stopped. Send ".\vpn.cmd logs" output to the maintainer.'
+    }
     # On a bad login, remove the container (and its copy of the secrets) so it can't retry and lock the account
     if ($log -match 'ppp0 did not come up') {
       Write-Host ''; docker compose down *> $null
