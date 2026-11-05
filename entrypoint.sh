@@ -67,6 +67,7 @@ usepeerdns
 connect-delay 5000
 lcp-echo-interval 30
 lcp-echo-failure 4
+logfile /proc/1/fd/1
 name "$(pppq "$VPN_USER")"
 password "$(pppq "$VPN_PASSWORD")"
 EOF
@@ -78,7 +79,8 @@ sleep 2
 swanctl --load-all
 swanctl --initiate --child l2tp --timeout 30
 
-xl2tpd -c /etc/xl2tpd/xl2tpd.conf -C /var/run/xl2tpd/l2tp-control
+# -D keeps xl2tpd in the foreground so its log reaches the container log; pppd logs there via "logfile"
+xl2tpd -D -c /etc/xl2tpd/xl2tpd.conf -C /var/run/xl2tpd/l2tp-control &
 sleep 1
 echo "c vpn" > /var/run/xl2tpd/l2tp-control
 

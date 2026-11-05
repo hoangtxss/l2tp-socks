@@ -4,7 +4,9 @@ services:
     container_name: l2tp-socks
     env_file: .env              # VPN_SERVER, VPN_DNS only - no secrets here
     secrets: [vpn_user, vpn_password, vpn_psk]
-    cap_add: [NET_ADMIN]
+    # SYS_MODULE: Docker Desktop's 6.x kernel has PPP async as a module (ppp_async) and
+    # dev.tty.ldisc_autoload=0, so pppd needs it to load the PPP line discipline on demand
+    cap_add: [NET_ADMIN, SYS_MODULE]
     devices: ["/dev/ppp:/dev/ppp"]
     ports:
       - "127.0.0.1:1080:1080"   # localhost only: the proxy has no password
